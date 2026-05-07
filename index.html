@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Léa Morin — Photographe</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --cream:#F5F2EC;
+    --dark:#1A1713;
+    --warm:#8B7355;
+    --accent:#C4956A;
+    --light:#E8E3D9;
+  }
+  body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+  
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px);background:rgba(26,23,19,0.7);border-bottom:1px solid rgba(196,149,106,0.15)}
+  .logo{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:1.3rem;letter-spacing:0.05em;color:var(--cream); text-transform: uppercase;}
+  .logo span{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:var(--accent); font-weight: 600;}
+  nav ul{list-style:none;display:flex;gap:2.5rem}
+  nav ul a{color:rgba(245,242,236,0.6);text-decoration:none;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.3s}
+  nav ul a:hover{color:var(--accent)}
+
+  .hero{min-height:100vh;display:flex;align-items:center;padding:0 3rem;position:relative;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1A1713 0%,#2C2418 40%,#1A1713 100%)}
+  .hero-img{position:absolute;right: -5px;%;top:0;width:55%;height:100%;object-fit:cover;filter:sepia(30%)}
+  /* .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,#1A1713 35%,transparent 70%)} */
+  .hero-content{position:relative;z-index:2;max-width:600px}
+  .hero-tag{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+  .hero-tag::before{content:'';display:block;width:40px;height:1px;background:var(--accent)}
+  h1{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:clamp(3rem,6vw,5.5rem);line-height:1.05;margin-bottom:1.5rem;font-weight:400}
+  h1 em{display:block;color:var(--accent); font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;}
+  .hero-desc{color:rgba(245,242,236,0.55);line-height:1.8;font-size:1rem;max-width:420px;margin-bottom:2.5rem;font-weight:300}
+  .btn-primary{display:inline-flex;align-items:center;gap:0.75rem;padding:1rem 2rem;background:var(--accent);color:var(--dark);font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;font-weight:500;transition:all 0.3s;cursor:pointer;border:none}
+  .btn-primary:hover{background:var(--cream)}
+  .btn-primary svg{transition:transform 0.3s}
+  .btn-primary:hover svg{transform:translateX(4px)}
+  .scroll-hint{position:absolute;bottom:2.5rem;left:3rem;display:flex;align-items:center;gap:0.75rem;font-size:0.75rem;color:rgba(245,242,236,0.35);letter-spacing:0.1em;text-transform:uppercase}
+  .scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollAnim 2s ease-in-out infinite}
+  @keyframes scrollAnim{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(0.5);opacity:0.3}}
+
+  section{padding:6rem 3rem}
+  .section-label{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:3rem;display:flex;align-items:center;gap:1rem}
+  .section-label::before{content:'';display:block;width:30px;height:1px;background:var(--accent)}
+
+  .gallery-section{background:var(--dark);padding:5rem 3rem}
+  .gallery-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1.5rem}
+  .gallery-title{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:2.5rem;font-weight:400}
+  .filter-btns{display:flex;gap:0.5rem;flex-wrap:wrap}
+  .filter-btn{padding:0.5rem 1.25rem;border:1px solid rgba(245,242,236,0.2);background:transparent;color:rgba(245,242,236,0.5);font-size:0.8rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s;font-family:'DM Sans',sans-serif;text-transform:uppercase}
+  .filter-btn.active,.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+  .masonry{columns:3;gap:1.25rem;column-gap:1.25rem}
+  @media(max-width:900px){.masonry{columns:2}}
+  @media(max-width:600px){.masonry{columns:1}.about{grid-template-columns:1fr!important}.nav ul{gap:1rem}nav{padding:1rem 1.5rem}}
+  .photo-item{break-inside:avoid;margin-bottom:1.25rem;position:relative;overflow:hidden;cursor:pointer;display:block}
+  .photo-item img{width:100%;display:block;transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);filter:grayscale(15%)}
+  .photo-item:hover img{transform:scale(1.04);filter:grayscale(0%)}
+  .photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,23,19,0.85) 0%,transparent 50%);opacity:0;transition:opacity 0.4s;display:flex;align-items:flex-end;padding:1.5rem}
+  .photo-item:hover .photo-overlay{opacity:1}
+  .photo-info h3{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif,serif;font-size:1.1rem;font-weight:400;color:var(--cream)}
+  .photo-info p{font-size:0.75rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.2rem}
+  .photo-item.hidden{display:none}
+
+  .lightbox{position:fixed;inset:0;z-index:1000;background:rgba(10,8,6,0.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s}
+  .lightbox.active{opacity:1;pointer-events:all}
+  .lightbox-img{max-width:85vw;max-height:85vh;object-fit:contain}
+  .lightbox-close{position:absolute;top:2rem;right:2rem;width:44px;height:44px;background:transparent;border:1px solid rgba(245,242,236,0.3);color:var(--cream);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+  .lightbox-close:hover{border-color:var(--accent);color:var(--accent)}
+  .lightbox-caption{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);text-align:center}
+  .lightbox-caption h3{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif,serif;font-size:1.2rem;font-weight:400}
+  .lightbox-caption p{font-size:0.8rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-top:0.3rem}
+  .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:50px;height:50px;background:transparent;border:1px solid rgba(245,242,236,0.2);color:var(--cream);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+  .lightbox-nav:hover{border-color:var(--accent)}
+  .lightbox-prev{left:2rem}
+  .lightbox-next{right:2rem}
+
+  .about{background:#201C17;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;padding:6rem 3rem}
+  .about-img-wrap{position:relative;padding-bottom:2rem;padding-right:2rem}
+  .about-img{width:100%;object-fit:cover;filter:sepia(20%);display:block}
+  .about-frame{position:absolute;bottom:0;right:0;width:70%;height:70%;border:1px solid var(--accent);z-index:0;pointer-events:none}
+  .about-img-wrap img{position:relative;z-index:1}
+  .about-tag{display:inline-block;padding:0.4rem 1rem;border:1px solid rgba(196,149,106,0.4);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
+  .about h2{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:2.8rem;font-weight:400;margin-bottom:1.5rem;line-height:1.1}
+  .about h2 em{color:var(--accent)}
+  .about p{color:rgba(245,242,236,0.55);line-height:1.9;font-weight:300;margin-bottom:1rem}
+  .about-stats{display:flex;gap:2.5rem;margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(245,242,236,0.1)}
+  .stat-num{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:2.2rem;color:var(--accent)}
+  .stat-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(245,242,236,0.4);margin-top:0.2rem}
+
+  .contact{background:var(--dark);text-align:center;padding:6rem 3rem}
+  .contact h2{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-size:3rem;font-weight:400;margin-bottom:0.75rem}
+  .contact h2 em{color:var(--accent)}
+  .contact > p{color:rgba(245,242,236,0.45);margin-bottom:2.5rem;font-weight:300}
+  .contact-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+  .contact-link{padding:1rem 2rem;border:1px solid rgba(245,242,236,0.2);color:rgba(245,242,236,0.6);text-decoration:none;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s}
+  .contact-link:hover{border-color:var(--accent);color:var(--accent)}
+
+  footer{padding:2rem 3rem;border-top:1px solid rgba(245,242,236,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+  footer p{font-size:0.75rem;color:rgba(245,242,236,0.25);letter-spacing:0.05em}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  .fade-up{animation:fadeUp 0.8s ease forwards}
+  .delay-1{animation-delay:0.15s;opacity:0}
+  .delay-2{animation-delay:0.3s;opacity:0}
+  .delay-3{animation-delay:0.45s;opacity:0}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Matis <span>Chartrand</span></div>
+  <ul>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="accueil">
+  <div class="hero-bg"></div>
+  <img class="hero-img" src="./img/IMG_8951.jpg" alt="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag fade-up">Photo & Vidéo</div>
+    <h1 class="fade-up delay-1">
+      Capturer<br>
+      <em>l'éphémère</em>
+    </h1>
+    <p class="hero-desc fade-up delay-2">Passionné par l’aventure, le sport et le plein air, je crée des photos et des vidéos authentiques qui capturent l’énergie et l’émotion de chaque expérience.</p>
+    <a class="btn-primary fade-up delay-3" href="#galerie">
+      Voir mon travail
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Défiler
+  </div>
+</section>
+
+<section class="gallery-section" id="galerie">
+  <div class="gallery-header">
+    <div>
+      <div class="section-label">Portfolio</div>
+      <h2 class="gallery-title">Ma galerie</h2>
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active" data-filter="all">Tout</button>
+      <button class="filter-btn" data-filter="portrait">Portrait</button>
+      <button class="filter-btn" data-filter="nature">Nature</button>
+      <button class="filter-btn" data-filter="urbain">Urbain</button>
+      <button class="filter-btn" data-filter="voyage">Voyage</button>
+    </div>
+  </div>
+
+  <div class="masonry" id="gallery">
+    <div class="photo-item" data-cat="portrait" data-title="Patinage artistique" data-sub="Portrait">
+      <img src="./img/IMG_0047e.jpg" alt="">
+      <div class="photo-overlay"><div class="photo-info"><h3>Patinage artistique</h3><p>Portrait</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="portrait" data-title="Patinage artistique" data-sub="Portrait">
+      <img src="./img/IMG_0067.jpg" alt="Forêt brumeuse">
+      <div class="photo-overlay"><div class="photo-info"><h3>Patinage artistique</h3><p>Portrait</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="portrait" data-title="Patinage artistique" data-sub="Portrait">
+      <img src="./img/IMG_0214.jpg" alt="Skyline urbain">
+      <div class="photo-overlay"><div class="photo-info"><h3>Patinage artistique</h3><p>Portrait</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="portrait" data-title="Patinage artistique" data-sub="Portrait">
+      <img src="./img/IMG_0230.jpg" alt="Marrakech">
+      <div class="photo-overlay"><div class="photo-info"><h3>Patinage artistique</h3><p>Portrait</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="voyage" data-title="République Dominicaine" data-sub="Voyage">
+      <img src="./img/IMG_0371.jpg" alt="Portrait regard">
+      <div class="photo-overlay"><div class="photo-info"><h3>République Dominicaine</h3><p>Voyage</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="voyage" data-title="République Dominicaine" data-sub="Voyage">
+      <img src="./img/IMG_0480.jpg" alt="Coucher de soleil">
+      <div class="photo-overlay"><div class="photo-info"><h3>République Dominicaine</h3><p>Voyage</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="voyage" data-title="République Dominicaine" data-sub="Voyage">
+      <img src="./img/IMG_0786.jpg" alt="Paris nuit">
+      <div class="photo-overlay"><div class="photo-info"><h3>République Dominicaine</h3><p>Voyage</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="voyage" data-title="République Dominicaine" data-sub="Voyage">
+      <img src="./img/IMG_0791.jpg" alt="Santorini">
+      <div class="photo-overlay"><div class="photo-info"><h3>République Dominicaine</h3><p>Voyage</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="voyage" data-title="République Dominicaine" data-sub="Voyage">
+      <img src="./img/IMG_0840.jpg" alt="Portrait mélancolie">
+      <div class="photo-overlay"><div class="photo-info"><h3>République Dominicaine</h3><p>Voyage</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="voyage" data-title="République Dominicaine" data-sub="Voyage">
+      <img src="./img/IMG_1019.jpg" alt="Cascade">
+      <div class="photo-overlay"><div class="photo-info"><h3>République Dominicaine</h3><p>Voyage</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="urbain" data-title="Salon du vélo Montréal" data-sub="Urbain">
+      <img src="./img/IMG_5538.jpg" alt="Architecture géométrique">
+      <div class="photo-overlay"><div class="photo-info"><h3>Salon du vélo Montréal</h3><p>Urbain</p></div></div>
+    </div>
+    <div class="photo-item" data-cat="nature" data-title="Costa Rica" data-sub="Nature">
+      <img src="./img/IMG_5872.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Costa Rica</h3><p>Nature</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Costa Rica" data-sub="Voyage">
+      <img src="./img/IMG_5896.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Costa Rica</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Costa Rica" data-sub="Voyage">
+      <img src="./img/IMG_5902.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Costa Rica</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Costa Rica" data-sub="Voyage">
+      <img src="./img/IMG_5931.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Costa Rica</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Gaspésie" data-sub="Voyage">
+      <img src="./img/IMG_8441.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Gaspésie</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Gaspésie" data-sub="Voyage">
+      <img src="./img/IMG_8456.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Gaspésie</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Gaspésie" data-sub="Voyage">
+      <img src="./img/IMG_8652.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Gaspésie</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Colombie-Britannique" data-sub="Voyage">
+      <img src="./img/IMG_8795.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Gaspésie" data-sub="Voyage">
+      <img src="./img/IMG_9082.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Gaspésie</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Colombie-Britannique" data-sub="Voyage">
+      <img src="./img/IMG_9343.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Colombie-Britannique" data-sub="Voyage">
+      <img src="./img/IMG_9355.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Colombie-Britannique" data-sub="Voyage">
+      <img src="./img/IMG_9371.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Voyage</p></div></div>
+    </div>
+     <div class="photo-item" data-cat="voyage" data-title="Colombie-Britannique" data-sub="Voyage">
+      <img src="./img/IMG_9397.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Voyage</p></div></div>
+    </div>
+      <div class="photo-item" data-cat="voyage" data-title="Colombie-Britannique" data-sub="Voyage">
+      <img src="./img/IMG_9521.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Voyage</p></div></div>
+    </div>
+      <div class="photo-item" data-cat="nature" data-title="Colombie-Britannique" data-sub="Nature">
+      <img src="./img/IMG_9577.jpg" alt="Kyoto">
+      <div class="photo-overlay"><div class="photo-info"><h3>Colombie-Britannique</h3><p>Nature</p></div></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="about" id="apropos">
+  <div class="about-img-wrap">
+    <img class="about-img" src="./img/IMG_8619.jpg" alt="Matis Chartrand photographe">
+    <div class="about-frame"></div>
+  </div>
+  <div>
+    <div class="section-label">À propos</div>
+    <span class="about-tag">Photographe & Artiste visuelle</span>
+    <h2>Bonjour, je suis <em>Matis Chartrand</em></h2>
+    <p>Je suis un photographe/vidéaste passionné par les sports d'actions et les sports de plein air. J'adore capturer des moments uniques grâce à mon appareil afin de créer des souvenirs chez mes clients. Choisir mon travail, c'est choisir des images d'une qualité remarquable!</p>
+    <div class="about-stats">
+      <div>
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Années d'expérience</div>
+      </div>
+      <div>
+        <div class="stat-num">30+</div>
+        <div class="stat-label">Projets réalisés</div>
+      </div>
+      <div>
+        <div class="stat-num">14</div>
+        <div class="stat-label">Pays visités</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="section-label" style="justify-content:center">Contact</div>
+  <h2>Travaillons <em>ensemble</em></h2>
+  <p>Vous avez un projet en tête ? Je serais ravi d'en discuter.</p>
+  <div class="contact-links">
+    <a class="contact-link" href="mailto:matischartrand@gmail.com">✉ matischartrand@gmail.com</a>
+    <a class="contact-link" href="https://www.instagram.com/matischartrand_?igsh=dWpya3RwZWUzdGI3&utm_source=qr">Instagram</a>
+    <a class="contact-link" href="https://youtube.com/@matischartrand?si=QI_E_uZ0t16bW55v">YouTube</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Matis Chartrand — Tous droits réservés</p>
+  <p>Photographe · Montréal, Québec</p>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lbPrev">&#8249;</button>
+  <img class="lightbox-img" id="lbImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lbNext">&#8250;</button>
+  <div class="lightbox-caption">
+    <h3 id="lbTitle"></h3>
+    <p id="lbSub"></p>
+  </div>
+</div>
+
+<script>
+  // Filtres
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.photo-item');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      items.forEach(item => {
+        if (f === 'all' || item.dataset.cat === f) item.classList.remove('hidden');
+        else item.classList.add('hidden');
+      });
+    });
+  });
+
+  // Lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbSub = document.getElementById('lbSub');
+  let visible = [], curIdx = 0;
+
+  function getVisible() { return Array.from(items).filter(i => !i.classList.contains('hidden')); }
+  function openLb(item, idx) {
+    const img = item.querySelector('img');
+    lbImg.src = img.src.replace('w=600', 'w=1200');
+    lbTitle.textContent = item.dataset.title;
+    lbSub.textContent = item.dataset.sub;
+    lb.classList.add('active');
+    curIdx = idx;
+    visible = getVisible();
+  }
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      visible = getVisible();
+      openLb(item, visible.indexOf(item));
+    });
+  });
+  document.getElementById('lbClose').addEventListener('click', () => lb.classList.remove('active'));
+  lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('active'); });
+  document.getElementById('lbPrev').addEventListener('click', () => { curIdx = (curIdx - 1 + visible.length) % visible.length; openLb(visible[curIdx], curIdx); });
+  document.getElementById('lbNext').addEventListener('click', () => { curIdx = (curIdx + 1) % visible.length; openLb(visible[curIdx], curIdx); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') lb.classList.remove('active');
+    if (e.key === 'ArrowLeft') { curIdx = (curIdx - 1 + visible.length) % visible.length; openLb(visible[curIdx], curIdx); }
+    if (e.key === 'ArrowRight') { curIdx = (curIdx + 1) % visible.length; openLb(visible[curIdx], curIdx); }
+  });
+
+  // Navigation fluide
+  document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
